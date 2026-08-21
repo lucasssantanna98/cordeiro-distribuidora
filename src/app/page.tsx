@@ -4,6 +4,8 @@ import ProductCard from '../components/ProductCard';
 import Link from 'next/link';
 import { getProducts } from '../services/productService';
 
+export const revalidate = 0;
+
 export default async function Home() {
   const products = await getProducts();
   
