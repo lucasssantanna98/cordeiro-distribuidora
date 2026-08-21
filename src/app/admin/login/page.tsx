@@ -30,7 +30,7 @@ export default function Login() {
     <div className={styles.container}>
       <form onSubmit={handleLogin} className={styles.form}>
         <h1 className={styles.title}>Cordeiro Admin</h1>
-        {error && <p className={styles.error}>Credenciais inválidas ou não configuradas.</p>}
+        {error && <p className={styles.error}>{error}</p>}
         <input 
           type="email" 
           placeholder="E-mail" 
