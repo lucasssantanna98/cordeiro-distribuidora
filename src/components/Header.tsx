@@ -10,13 +10,13 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <div className={styles.logoContainer}>
+      <Link href="/" className={styles.logoContainer}>
         <Image src="/logo.png" alt="Cordeiro Distribuidora Logo" width={45} height={45} className={styles.logoImage} />
         <div className={styles.placeholderLogo}>
           <span className={styles.brandName}>Cordeiro</span>
           <span className={styles.brandSub}>Distribuidora</span>
         </div>
-      </div>
+      </Link>
       <div className={styles.actions}>
         <Link href="/cart" className={styles.cartBtn}>
           🛒
