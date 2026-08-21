@@ -1,5 +1,6 @@
 "use client";
 
+import Image from 'next/image';
 import { Product } from '../types';
 import { useCart } from '../context/CartContext';
 import styles from './ProductCard.module.css';
@@ -17,10 +18,17 @@ export default function ProductCard({ product }: Props) {
 
   return (
     <div className={`${styles.card} glass`}>
-      <div className={styles.imagePlaceholder}>
-        <span className={styles.categoryBadge}>{product.category}</span>
-        {product.name.charAt(0)}
-      </div>
+      {product.image_url ? (
+        <div className={styles.imageContainer}>
+          <Image src={product.image_url} alt={product.name} fill style={{ objectFit: 'cover' }} />
+          <span className={styles.categoryBadge} style={{ zIndex: 10 }}>{product.category}</span>
+        </div>
+      ) : (
+        <div className={styles.imagePlaceholder}>
+          <span className={styles.categoryBadge}>{product.category}</span>
+          {product.name.charAt(0)}
+        </div>
+      )}
       <div className={styles.info}>
         <h3 className={styles.title}>{product.name}</h3>
         <p className={styles.desc}>{product.description}</p>

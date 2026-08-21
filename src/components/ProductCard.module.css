@@ -21,6 +21,12 @@
   position: relative;
 }
 
+.imageContainer {
+  height: 160px;
+  position: relative;
+  background-color: var(--color-bg-elevated);
+}
+
 .categoryBadge {
   position: absolute;
   top: var(--space-2);
