@@ -13,6 +13,8 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
 
   // Form states
@@ -122,6 +124,12 @@ export default function AdminDashboard() {
 
   if (loading) return <div className={styles.container}>Carregando painel...</div>;
 
+  const filteredProducts = products.filter(p => {
+    const matchesCategory = selectedCategory === 'Todos' || p.category === selectedCategory;
+    const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -129,6 +137,27 @@ export default function AdminDashboard() {
         <div className={styles.headerActions}>
           <button onClick={openNewModal} className={styles.primaryBtn}>+ Novo Produto</button>
           <button onClick={handleLogout} className={styles.secondaryBtn}>Sair</button>
+        </div>
+      </div>
+
+      <div className={styles.filters}>
+        <input 
+          type="text" 
+          placeholder="Buscar produto por nome..." 
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+          className={styles.searchInput}
+        />
+        <div className={styles.categoryFilters}>
+          {CATEGORIES.map(cat => (
+            <button 
+              key={cat} 
+              onClick={() => setSelectedCategory(cat)}
+              className={selectedCategory === cat ? styles.filterBtnActive : styles.filterBtn}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -144,7 +173,7 @@ export default function AdminDashboard() {
             </tr>
           </thead>
           <tbody>
-            {products.map(p => (
+            {filteredProducts.map(p => (
               <tr key={p.id}>
                 <td>
                   {p.image_url ? (
