@@ -5,6 +5,7 @@ export interface Product {
   price: number;
   category: string;
   image_url: string;
+  is_active?: boolean;
 }
 
 export interface CartItem extends Product {
