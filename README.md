@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cordeiro Distribuidora - Catálogo Digital 🛒
 
-## Getting Started
+Um catálogo digital minimalista e focado na experiência mobile (mobile-first) para a distribuidora de bebidas e tabacaria Cordeiro. 
 
-First, run the development server:
+Este sistema permite que os clientes naveguem pelos produtos, filtrem por categoria, adicionem itens ao carrinho e finalizem o pedido diretamente via WhatsApp. Além disso, conta com um painel administrativo completo para o gerenciamento do catálogo.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Tecnologias Utilizadas
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **[Next.js](https://nextjs.org/) (App Router):** Framework React para renderização e rotas.
+- **Vanilla CSS:** Estilização customizada garantindo design único, animações e responsividade sem dependências externas.
+- **[Supabase](https://supabase.com/):** Backend as a Service (BaaS) utilizado como banco de dados PostgreSQL para armazenar produtos e categorias.
+- **[Vercel](https://vercel.com/):** Plataforma de hospedagem e CI/CD.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ✨ Funcionalidades Principais
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Para os Clientes:
+- **Catálogo Online:** Visualização de todos os produtos ativos.
+- **Filtros e Buscas:** Navegação facilitada por categorias de produtos.
+- **Carrinho de Compras Persistente:** Os itens adicionados ao carrinho ficam salvos no navegador (Local Storage) mesmo se o usuário fechar a página.
+- **Checkout Integrado:** Finalização do pedido gerando uma mensagem estruturada e redirecionando automaticamente para o WhatsApp de atendimento da loja.
 
-## Learn More
+### Para o Administrador (Painel `/admin`):
+- **Gestão de Produtos:** Adicionar, editar e excluir produtos do catálogo.
+- **Controle de Visibilidade:** Opção para ativar ou inativar produtos (produtos inativos não aparecem para o cliente, mas continuam salvos no sistema).
+- **Busca e Filtro Avançados:** Barra de pesquisa e filtro por categorias exclusivos do painel para facilitar a gestão de grandes estoques.
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Como Executar o Projeto Localmente
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/lucasssantanna98/cordeiro-distribuidora.git
+   cd cordeiro-distribuidora
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **Instale as dependências:**
+   ```bash
+   npm install
+   ```
 
-## Deploy on Vercel
+3. **Configuração das Variáveis de Ambiente:**
+   Crie um arquivo `.env.local` na raiz do projeto e adicione suas chaves do Supabase:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=sua_url_do_supabase
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_chave_anonima_do_supabase
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Execute o servidor de desenvolvimento:**
+   ```bash
+   npm run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. **Acesse a aplicação:**
+   - App Principal: [http://localhost:3000](http://localhost:3000)
+   - Painel Admin: [http://localhost:3000/admin](http://localhost:3000/admin)
+
+## 🗄️ Estrutura do Banco de Dados (Supabase)
+
+O banco de dados possui uma tabela principal chamada `products` com a seguinte estrutura:
+
+- `id` (uuid, primary key)
+- `name` (text, not null)
+- `description` (text)
+- `price` (numeric, not null)
+- `category` (text, not null)
+- `image_url` (text)
+- `active` (boolean, default: true)
+- `created_at` (timestamp)
+
+## 📞 Contato
+
+Para dúvidas ou suporte relacionado à aplicação, entre em contato através do repositório ou com o desenvolvedor responsável.
