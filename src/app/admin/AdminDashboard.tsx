@@ -117,6 +117,15 @@ export default function AdminDashboard() {
     }
   }
 
+  async function handleToggleActive(product: Product) {
+    try {
+      await updateProduct(product.id, { is_active: !product.is_active });
+      loadProducts();
+    } catch (error: any) {
+      alert('Erro ao alterar status: ' + error.message);
+    }
+  }
+
   async function handleLogout() {
     await supabase.auth.signOut();
     router.push('/admin/login');
@@ -186,6 +195,12 @@ export default function AdminDashboard() {
                 <td>R$ {p.price.toFixed(2).replace('.', ',')}</td>
                 <td>{p.category}</td>
                 <td>
+                  <button 
+                    onClick={() => handleToggleActive(p)} 
+                    className={p.is_active ? styles.activeBtn : styles.inactiveBtn}
+                  >
+                    {p.is_active ? '✅ Ativo' : '❌ Inativo'}
+                  </button>
                   <button onClick={() => openEditModal(p)} className={styles.editBtn}>Editar</button>
                   <button onClick={() => handleDelete(p.id)} className={styles.deleteBtn}>Excluir</button>
                 </td>

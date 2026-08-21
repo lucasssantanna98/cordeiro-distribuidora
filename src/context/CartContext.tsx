@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Product, CartItem } from '../types';
 
 interface CartContextType {
@@ -17,6 +17,24 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('@cordeiro-cart');
+    if (saved) {
+      try {
+        setItems(JSON.parse(saved));
+      } catch (e) {}
+    }
+    setIsLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem('@cordeiro-cart', JSON.stringify(items));
+    }
+  }, [items, isLoaded]);
+
 
   const addToCart = (product: Product) => {
     setItems(prev => {
