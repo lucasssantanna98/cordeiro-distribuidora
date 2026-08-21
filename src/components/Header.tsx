@@ -2,6 +2,7 @@
 
 import styles from './Header.module.css';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 
 export default function Header() {
@@ -10,10 +11,10 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.logoContainer}>
-        {/* TODO: Substituir por imagem da logo quando recebida */}
+        <Image src="/logo.png" alt="Cordeiro Distribuidora Logo" width={45} height={45} className={styles.logoImage} />
         <div className={styles.placeholderLogo}>
           <span className={styles.brandName}>Cordeiro</span>
-          <span className={styles.brandSub}>Tabacaria</span>
+          <span className={styles.brandSub}>Distribuidora</span>
         </div>
       </div>
       <div className={styles.actions}>

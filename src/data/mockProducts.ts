@@ -7,7 +7,7 @@ export const CATEGORIES = [
   'Combos',
   'Energéticos',
   'Refrigerantes',
-  'Tabacaria'
+  'Diversos'
 ];
 
 export const MOCK_PRODUCTS: Product[] = [
@@ -64,7 +64,7 @@ export const MOCK_PRODUCTS: Product[] = [
     name: 'Essência Zomo Mint',
     description: 'Essência para narguilé sabor Menta',
     price: 15.00,
-    category: 'Tabacaria',
+    category: 'Diversos',
     image_url: ''
   }
 ];

@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Cordeiro Tabacaria",
-  description: "Catálogo digital e delivery - Cordeiro Tabacaria",
+  title: "Cordeiro Distribuidora",
+  description: "Catálogo digital e delivery - Cordeiro Distribuidora",
 };
 
 export default function RootLayout({

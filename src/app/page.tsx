@@ -22,7 +22,7 @@ export default async function Home() {
               <span className={styles.highlight}>onde você estiver.</span>
             </h1>
             <p className={styles.subtitle}>
-              Cordeiro Tabacaria & Distribuidora. Os melhores preços e entrega rápida pelo WhatsApp.
+              Cordeiro Distribuidora. Os melhores preços e entrega rápida pelo WhatsApp.
             </p>
             <div className={styles.actionButtons}>
               <Link href="/catalog" className={styles.primaryBtn}>

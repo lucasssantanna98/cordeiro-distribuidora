@@ -13,7 +13,7 @@ const STORE_PHONE = "5561992283532"; // Substituir pelo número real da distribu
 export function generateWhatsAppLink(details: OrderDetails): string {
   const { items, total, name, address, deliveryMethod } = details;
 
-  let message = `Olá, Cordeiro Tabacaria! Meu nome é *${name}* e gostaria de fazer o seguinte pedido:\n\n`;
+  let message = `Olá, Cordeiro Distribuidora! Meu nome é *${name}* e gostaria de fazer o seguinte pedido:\n\n`;
   
   message += `*ITENS DO PEDIDO:*\n`;
   items.forEach(item => {
