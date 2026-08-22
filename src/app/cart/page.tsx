@@ -53,7 +53,12 @@ export default function Cart() {
     <>
       <Header />
       <main className={styles.main}>
-        <h1 className={styles.title}>Carrinho</h1>
+        <div className={styles.headerBar}>
+          <h1 className={styles.title}>Carrinho</h1>
+          <button className={styles.clearBtn} onClick={clearCart}>
+            Limpar tudo
+          </button>
+        </div>
 
         <div className={styles.cartContent}>
           {/* Items List */}

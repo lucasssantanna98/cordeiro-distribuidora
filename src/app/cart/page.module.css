@@ -10,6 +10,27 @@
   font-weight: 800;
 }
 
+.headerBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clearBtn {
+  color: #ff4d4d;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid #ff4d4d;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  transition: all 0.2s;
+}
+
+.clearBtn:hover {
+  background: rgba(255, 77, 77, 0.1);
+}
+
 .emptyCart {
   text-align: center;
   margin-top: 20vh;
