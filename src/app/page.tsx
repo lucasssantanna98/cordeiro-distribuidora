@@ -9,8 +9,8 @@ export const revalidate = 0;
 export default async function Home() {
   const products = await getProducts();
   
-  // Pegamos apenas alguns combos e destaques para a home
-  const featuredProducts = products.filter(p => p.category === 'Combos' || p.category === 'Destilados').slice(0, 4);
+  // Pegamos os produtos marcados como destaque
+  const featuredProducts = products.filter(p => p.is_featured).slice(0, 4);
 
   return (
     <>

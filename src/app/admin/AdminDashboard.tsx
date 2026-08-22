@@ -24,6 +24,7 @@ export default function AdminDashboard() {
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState('');
+  const [isFeatured, setIsFeatured] = useState(false);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -59,6 +60,7 @@ export default function AdminDashboard() {
     setCategory(CATEGORIES.find(c => c !== 'Todos') || 'Diversos');
     setImageFile(null);
     setImageUrl('');
+    setIsFeatured(false);
     setIsModalOpen(true);
   }
 
@@ -70,6 +72,7 @@ export default function AdminDashboard() {
     setCategory(product.category);
     setImageUrl(product.image_url || '');
     setImageFile(null);
+    setIsFeatured(product.is_featured || false);
     setIsModalOpen(true);
   }
 
@@ -88,7 +91,8 @@ export default function AdminDashboard() {
         price: parseFloat(price.replace(',', '.')),
         category,
         image_url: finalImageUrl,
-        is_active: true
+        is_active: true,
+        is_featured: isFeatured
       };
 
       if (editingProduct) {
@@ -123,6 +127,15 @@ export default function AdminDashboard() {
       loadProducts();
     } catch (error: any) {
       alert('Erro ao alterar status: ' + error.message);
+    }
+  }
+
+  async function handleToggleFeatured(product: Product) {
+    try {
+      await updateProduct(product.id, { is_featured: !product.is_featured });
+      loadProducts();
+    } catch (error: any) {
+      alert('Erro ao alterar destaque: ' + error.message);
     }
   }
 
@@ -196,6 +209,13 @@ export default function AdminDashboard() {
                 <td>{p.category}</td>
                 <td>
                   <button 
+                    onClick={() => handleToggleFeatured(p)} 
+                    style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '1.2rem', marginRight: '8px' }}
+                    title={p.is_featured ? "Remover dos destaques" : "Adicionar aos destaques"}
+                  >
+                    {p.is_featured ? '⭐' : '☆'}
+                  </button>
+                  <button 
                     onClick={() => handleToggleActive(p)} 
                     className={p.is_active ? styles.activeBtn : styles.inactiveBtn}
                   >
@@ -232,6 +252,16 @@ export default function AdminDashboard() {
                   <option key={c} value={c}>{c}</option>
                 ))}
               </select>
+
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--color-text-primary)' }}>
+                <input 
+                  type="checkbox" 
+                  checked={isFeatured} 
+                  onChange={e => setIsFeatured(e.target.checked)} 
+                  style={{ width: '18px', height: '18px', accentColor: 'var(--color-primary)' }}
+                />
+                Destaque da semana (Tela Inicial)
+              </label>
               
               <div className={styles.fileInputGroup}>
                 <label>Imagem do Produto:</label>
