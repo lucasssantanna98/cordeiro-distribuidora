@@ -20,7 +20,13 @@ export default function ProductCard({ product }: Props) {
     <div className={`${styles.card} glass`}>
       {product.image_url ? (
         <div className={styles.imageContainer}>
-          <Image src={product.image_url} alt={product.name} fill style={{ objectFit: 'cover' }} />
+          <Image 
+            src={product.image_url} 
+            alt={product.name} 
+            fill 
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+            style={{ objectFit: 'contain', padding: '0.6rem' }} 
+          />
           <span className={styles.categoryBadge} style={{ zIndex: 10 }}>{product.category}</span>
         </div>
       ) : (

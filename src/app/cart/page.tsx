@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Header from '../../components/Header';
 import { useCart } from '../../context/CartContext';
 import { generateWhatsAppLink } from '../../utils/whatsapp';
@@ -25,9 +26,6 @@ export default function Cart() {
       deliveryMethod
     });
 
-    // Opcional: Limpar carrinho após o clique? 
-    // clearCart();
-    
     // Redirecionar para o WhatsApp
     window.open(link, '_blank');
   };
@@ -65,12 +63,26 @@ export default function Cart() {
           <div className={styles.itemsList}>
             {items.map(item => (
               <div key={item.id} className={`${styles.cartItem} glass`}>
-                <div className={styles.itemInfo}>
-                  <h4>{item.name}</h4>
-                  <span className={styles.itemPrice}>
-                    R$ {item.price.toFixed(2).replace('.', ',')} un
-                  </span>
+                <div className={styles.itemHeader}>
+                  {item.image_url ? (
+                    <div className={styles.itemThumb}>
+                      <Image 
+                        src={item.image_url} 
+                        alt={item.name} 
+                        fill 
+                        sizes="50px"
+                        style={{ objectFit: 'contain', padding: '2px' }} 
+                      />
+                    </div>
+                  ) : null}
+                  <div className={styles.itemInfo}>
+                    <h4>{item.name}</h4>
+                    <span className={styles.itemPrice}>
+                      R$ {item.price.toFixed(2).replace('.', ',')} un
+                    </span>
+                  </div>
                 </div>
+
                 <div className={styles.itemControls}>
                   <div className={styles.quantityControl}>
                     <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>

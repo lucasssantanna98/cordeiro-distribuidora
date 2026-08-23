@@ -3,7 +3,12 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .card:active {
@@ -11,7 +16,7 @@
 }
 
 .imagePlaceholder {
-  height: 160px;
+  height: 180px;
   background: linear-gradient(135deg, #1A1A1A, #2A2A2A);
   display: flex;
   align-items: center;
@@ -22,9 +27,9 @@
 }
 
 .imageContainer {
-  height: 160px;
+  height: 180px;
   position: relative;
-  background-color: var(--color-bg-elevated);
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0.25) 100%), var(--color-bg-elevated);
 }
 
 .categoryBadge {
@@ -39,6 +44,7 @@
   font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
+  backdrop-filter: blur(4px);
 }
 
 .info {
@@ -50,9 +56,9 @@
 }
 
 .title {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .desc {
@@ -85,9 +91,13 @@
   border-radius: var(--radius-full);
   font-weight: 700;
   font-size: 0.9rem;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
 .addBtn:hover {
   background-color: var(--color-primary-hover);
+}
+
+.addBtn:active {
+  transform: scale(0.95);
 }
