@@ -1,6 +1,9 @@
--- Cole este código no "SQL Editor" do seu painel do Supabase e clique em "Run"
+-- ============================================================
+-- SCRIPT DE ATUALIZAÇÃO / CRIAÇÃO DO BANCO NO SUPABASE
+-- Cole este código no "SQL Editor" do seu Supabase e clique em "Run"
+-- ============================================================
 
--- Criação da tabela de produtos
+-- 1. Criação da tabela de produtos (se ainda não existir)
 CREATE TABLE IF NOT EXISTS public.products (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
@@ -12,16 +15,25 @@ CREATE TABLE IF NOT EXISTS public.products (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- Habilitar RLS (Segurança)
+-- 2. Habilitar RLS (Segurança)
 ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
 
--- Permitir leitura pública (qualquer um pode ver o catálogo)
+-- 3. Políticas de acesso seguras (recria se já existirem para não dar erro)
+DROP POLICY IF EXISTS "Permitir leitura publica dos produtos" ON public.products;
 CREATE POLICY "Permitir leitura publica dos produtos"
   ON public.products
   FOR SELECT
   USING (true);
 
--- Inserir dados de exemplo com imagens locais
+DROP POLICY IF EXISTS "Permitir gerenciamento para usuarios autenticados" ON public.products;
+CREATE POLICY "Permitir gerenciamento para usuarios autenticados"
+  ON public.products
+  FOR ALL
+  USING (auth.role() = 'authenticated');
+
+-- 4. Limpar e recarregar o catálogo completo com as novas imagens
+TRUNCATE TABLE public.products;
+
 INSERT INTO public.products (name, description, price, category, image_url) VALUES
   -- Combos
   ('Combo Vodka Smirnoff + 4 Red Bull', '1 Vodka Smirnoff 998ml + 4 Red Bull Energy Drink 250ml', 89.90, 'Combos', '/products/combo-smirnoff-4-red-bull.png'),
@@ -75,36 +87,27 @@ INSERT INTO public.products (name, description, price, category, image_url) VALU
   -- Diversos
   ('Essência Zomo Strong Mint', 'Essência para narguilé sabor Menta refrescante', 15.00, 'Diversos', null);
 
--- Permitir que usuários autenticados gerenciem os produtos
-CREATE POLICY "Permitir gerenciamento para usuarios autenticados"
-  ON public.products
-  FOR ALL
-  USING (auth.role() = 'authenticated');
-
--- ==========================================
--- BUCKET DE IMAGENS E POLÍTICAS DE STORAGE
--- ==========================================
-
--- 1. Criar o bucket chamado 'products-images' (se não existir)
+-- 5. Bucket de imagens (se não existir)
 INSERT INTO storage.buckets (id, name, public) 
 VALUES ('products-images', 'products-images', true)
 ON CONFLICT (id) DO NOTHING;
 
--- 2. Permitir leitura pública das imagens
+DROP POLICY IF EXISTS "Imagens de produtos sao publicas" ON storage.objects;
 CREATE POLICY "Imagens de produtos sao publicas"
   ON storage.objects FOR SELECT
   USING ( bucket_id = 'products-images' );
 
--- 3. Permitir que usuários autenticados façam upload
+DROP POLICY IF EXISTS "Apenas admin pode fazer upload" ON storage.objects;
 CREATE POLICY "Apenas admin pode fazer upload"
   ON storage.objects FOR INSERT
   WITH CHECK ( bucket_id = 'products-images' AND auth.role() = 'authenticated' );
 
--- 4. Permitir que usuários autenticados modifiquem/excluam imagens
+DROP POLICY IF EXISTS "Apenas admin pode modificar imagens" ON storage.objects;
 CREATE POLICY "Apenas admin pode modificar imagens"
   ON storage.objects FOR UPDATE
   USING ( bucket_id = 'products-images' AND auth.role() = 'authenticated' );
 
+DROP POLICY IF EXISTS "Apenas admin pode deletar imagens" ON storage.objects;
 CREATE POLICY "Apenas admin pode deletar imagens"
   ON storage.objects FOR DELETE
   USING ( bucket_id = 'products-images' AND auth.role() = 'authenticated' );
