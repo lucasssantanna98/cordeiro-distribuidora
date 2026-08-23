@@ -18,7 +18,8 @@ export const MOCK_PRODUCTS: Product[] = [
     description: '1 Vodka Smirnoff 998ml + 4 Red Bull Energy Drink 250ml',
     price: 89.90,
     category: 'Combos',
-    image_url: '/products/combo-smirnoff-4-red-bull.png'
+    image_url: '/products/combo-smirnoff-4-red-bull.png',
+    is_featured: true
   },
   {
     id: 'combo-absolut-redbull',
@@ -26,7 +27,8 @@ export const MOCK_PRODUCTS: Product[] = [
     description: '1 Vodka Absolut Swedish 1L + 4 Red Bull Energy Drink 250ml',
     price: 149.90,
     category: 'Combos',
-    image_url: '/products/combo-absolut-4-red-bull.png'
+    image_url: '/products/combo-absolut-4-red-bull.png',
+    is_featured: true
   },
   {
     id: 'combo-redlabel-redbull',
@@ -34,7 +36,8 @@ export const MOCK_PRODUCTS: Product[] = [
     description: '1 Whisky Johnnie Walker Red Label 1L + 4 Red Bull Energy Drink 250ml',
     price: 139.90,
     category: 'Combos',
-    image_url: '/products/combo-whisky-red-label-4-red-bull.png'
+    image_url: '/products/combo-whisky-red-label-4-red-bull.png',
+    is_featured: true
   },
   {
     id: 'combo-tanqueray-tonica',
@@ -42,7 +45,8 @@ export const MOCK_PRODUCTS: Product[] = [
     description: '1 Gin Tanqueray London Dry 750ml + 4 Schweppes Tônica 350ml',
     price: 159.90,
     category: 'Combos',
-    image_url: '/products/combo-gin-tanqueray-4-tonicas.png'
+    image_url: '/products/combo-gin-tanqueray-4-tonicas.png',
+    is_featured: true
   },
 
   // --- CERVEJAS ---

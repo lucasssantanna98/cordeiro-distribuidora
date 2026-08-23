@@ -12,8 +12,12 @@ CREATE TABLE IF NOT EXISTS public.products (
   category TEXT NOT NULL,
   image_url TEXT,
   is_active BOOLEAN DEFAULT true,
+  is_featured BOOLEAN DEFAULT false,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+-- Garante que a coluna is_featured exista caso a tabela já tenha sido criada antes
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS is_featured BOOLEAN DEFAULT false;
 
 -- 2. Habilitar RLS (Segurança)
 ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
@@ -34,58 +38,58 @@ CREATE POLICY "Permitir gerenciamento para usuarios autenticados"
 -- 4. Limpar e recarregar o catálogo completo com as novas imagens
 TRUNCATE TABLE public.products;
 
-INSERT INTO public.products (name, description, price, category, image_url) VALUES
-  -- Combos
-  ('Combo Vodka Smirnoff + 4 Red Bull', '1 Vodka Smirnoff 998ml + 4 Red Bull Energy Drink 250ml', 89.90, 'Combos', '/products/combo-smirnoff-4-red-bull.png'),
-  ('Combo Vodka Absolut + 4 Red Bull', '1 Vodka Absolut Swedish 1L + 4 Red Bull Energy Drink 250ml', 149.90, 'Combos', '/products/combo-absolut-4-red-bull.png'),
-  ('Combo Whisky Red Label + 4 Red Bull', '1 Whisky Johnnie Walker Red Label 1L + 4 Red Bull Energy Drink 250ml', 139.90, 'Combos', '/products/combo-whisky-red-label-4-red-bull.png'),
-  ('Combo Gin Tanqueray + 4 Tônicas', '1 Gin Tanqueray London Dry 750ml + 4 Schweppes Tônica 350ml', 159.90, 'Combos', '/products/combo-gin-tanqueray-4-tonicas.png'),
+INSERT INTO public.products (name, description, price, category, image_url, is_featured) VALUES
+  -- Combos (Destaques da semana)
+  ('Combo Vodka Smirnoff + 4 Red Bull', '1 Vodka Smirnoff 998ml + 4 Red Bull Energy Drink 250ml', 89.90, 'Combos', '/products/combo-smirnoff-4-red-bull.png', true),
+  ('Combo Vodka Absolut + 4 Red Bull', '1 Vodka Absolut Swedish 1L + 4 Red Bull Energy Drink 250ml', 149.90, 'Combos', '/products/combo-absolut-4-red-bull.png', true),
+  ('Combo Whisky Red Label + 4 Red Bull', '1 Whisky Johnnie Walker Red Label 1L + 4 Red Bull Energy Drink 250ml', 139.90, 'Combos', '/products/combo-whisky-red-label-4-red-bull.png', true),
+  ('Combo Gin Tanqueray + 4 Tônicas', '1 Gin Tanqueray London Dry 750ml + 4 Schweppes Tônica 350ml', 159.90, 'Combos', '/products/combo-gin-tanqueray-4-tonicas.png', true),
 
   -- Cervejas
-  ('Heineken Long Neck 330ml', 'Cerveja Premium Lager Puro Malte Holandesa', 7.50, 'Cervejas', '/products/cerveja-heineken-330ml.png'),
-  ('Pack 6 Heineken Long Neck 330ml', 'Pack com 6 unidades Long Neck 330ml', 42.00, 'Cervejas', '/products/cerveja-long-neck-heineken-330ml-pack-6und.jpg'),
-  ('Corona Extra Long Neck 330ml', 'Cerveja Premium tipo Pilsen Mexicana', 8.00, 'Cervejas', '/products/corona-extra-330ml.png'),
-  ('Pack 6 Corona Extra 330ml', 'Pack com 6 unidades Long Neck 330ml', 45.00, 'Cervejas', '/products/corona-extra-330ml-pack-6und.png'),
-  ('Stella Artois Long Neck 330ml', 'Cerveja Premium Puro Malte Belga', 7.50, 'Cervejas', '/products/stella-artois-long-neck-330ml.png'),
-  ('Pack 6 Stella Artois 330ml', 'Pack com 6 unidades Long Neck 330ml', 42.00, 'Cervejas', '/products/stella-artois-long-neck-330ml-pack-6und.png'),
-  ('Spaten Long Neck 355ml', 'Cerveja Puro Malte estilo Munich Helles', 6.90, 'Cervejas', '/products/spaten-long-neck-355ml.png'),
-  ('Pack 6 Spaten Long Neck 355ml', 'Pack com 6 unidades Long Neck 355ml', 38.90, 'Cervejas', '/products/spaten-long-neck-355ml-pack-6und.png'),
-  ('Brahma Duplo Malte Lata 350ml', 'Cerveja Puro Malte Pilsen e Munich', 4.50, 'Cervejas', '/products/brahma-duplo-malte-lata-350ml.png'),
-  ('Pack 12 Brahma Duplo Malte 350ml', 'Pack com 12 latinhas de 350ml', 49.90, 'Cervejas', '/products/brahma-duplo-malte-lata-350ml-pack-12und.png'),
-  ('Amstel Puro Malte Lata 350ml', 'Cerveja Lager Puro Malte receita de Amsterdã', 4.20, 'Cervejas', '/products/amstel-lata-350ml.png'),
-  ('Pack 12 Amstel Lata 350ml', 'Pack com 12 latinhas de 350ml', 46.90, 'Cervejas', '/products/amstel-lata-350ml-pack-12und.png'),
-  ('Budweiser Lata 350ml', 'Cerveja American Lager The King of Beers', 4.70, 'Cervejas', '/products/budweiser-lata-350ml.png'),
-  ('Pack 12 Budweiser Lata 350ml', 'Pack com 12 latinhas de 350ml', 52.90, 'Cervejas', '/products/budweiser-lata-350ml-pack-12und.png'),
-  ('Skol Lata 350ml', 'Cerveja Pilsen leve e refrescante', 3.99, 'Cervejas', '/products/skol-lata-350ml.png'),
-  ('Pack 12 Skol Lata 350ml', 'Pack com 12 latinhas de 350ml', 44.90, 'Cervejas', '/products/skol-lata-350ml-pack-12und.png'),
+  ('Heineken Long Neck 330ml', 'Cerveja Premium Lager Puro Malte Holandesa', 7.50, 'Cervejas', '/products/cerveja-heineken-330ml.png', false),
+  ('Pack 6 Heineken Long Neck 330ml', 'Pack com 6 unidades Long Neck 330ml', 42.00, 'Cervejas', '/products/cerveja-long-neck-heineken-330ml-pack-6und.jpg', false),
+  ('Corona Extra Long Neck 330ml', 'Cerveja Premium tipo Pilsen Mexicana', 8.00, 'Cervejas', '/products/corona-extra-330ml.png', false),
+  ('Pack 6 Corona Extra 330ml', 'Pack com 6 unidades Long Neck 330ml', 45.00, 'Cervejas', '/products/corona-extra-330ml-pack-6und.png', false),
+  ('Stella Artois Long Neck 330ml', 'Cerveja Premium Puro Malte Belga', 7.50, 'Cervejas', '/products/stella-artois-long-neck-330ml.png', false),
+  ('Pack 6 Stella Artois 330ml', 'Pack com 6 unidades Long Neck 330ml', 42.00, 'Cervejas', '/products/stella-artois-long-neck-330ml-pack-6und.png', false),
+  ('Spaten Long Neck 355ml', 'Cerveja Puro Malte estilo Munich Helles', 6.90, 'Cervejas', '/products/spaten-long-neck-355ml.png', false),
+  ('Pack 6 Spaten Long Neck 355ml', 'Pack com 6 unidades Long Neck 355ml', 38.90, 'Cervejas', '/products/spaten-long-neck-355ml-pack-6und.png', false),
+  ('Brahma Duplo Malte Lata 350ml', 'Cerveja Puro Malte Pilsen e Munich', 4.50, 'Cervejas', '/products/brahma-duplo-malte-lata-350ml.png', false),
+  ('Pack 12 Brahma Duplo Malte 350ml', 'Pack com 12 latinhas de 350ml', 49.90, 'Cervejas', '/products/brahma-duplo-malte-lata-350ml-pack-12und.png', false),
+  ('Amstel Puro Malte Lata 350ml', 'Cerveja Lager Puro Malte receita de Amsterdã', 4.20, 'Cervejas', '/products/amstel-lata-350ml.png', false),
+  ('Pack 12 Amstel Lata 350ml', 'Pack com 12 latinhas de 350ml', 46.90, 'Cervejas', '/products/amstel-lata-350ml-pack-12und.png', false),
+  ('Budweiser Lata 350ml', 'Cerveja American Lager The King of Beers', 4.70, 'Cervejas', '/products/budweiser-lata-350ml.png', false),
+  ('Pack 12 Budweiser Lata 350ml', 'Pack com 12 latinhas de 350ml', 52.90, 'Cervejas', '/products/budweiser-lata-350ml-pack-12und.png', false),
+  ('Skol Lata 350ml', 'Cerveja Pilsen leve e refrescante', 3.99, 'Cervejas', '/products/skol-lata-350ml.png', false),
+  ('Pack 12 Skol Lata 350ml', 'Pack com 12 latinhas de 350ml', 44.90, 'Cervejas', '/products/skol-lata-350ml-pack-12und.png', false),
 
   -- Destilados
-  ('Whisky Johnnie Walker Black Label 1L', 'Blended Scotch Whisky envelhecido 12 anos', 169.00, 'Destilados', '/products/whisky-johnnie-walker-black-label-1l.png'),
-  ('Whisky Johnnie Walker Red Label 1L', 'O whisky escocês pioneiro e mais vendido do mundo', 98.00, 'Destilados', '/products/whisky-johnnie-walker-red-label-1l.png'),
-  ('Whisky Chivas Regal 12 Anos 1L', 'Blended Scotch Whisky refinado e aveludado', 159.00, 'Destilados', '/products/whisky-chivas-regal-12-anos-1l.png'),
-  ('Whisky Jack Daniel''s Old No. 7 1L', 'Tennessee Whiskey autêntico e encorpado', 165.00, 'Destilados', '/products/whisky-jack-daniels-1l.png'),
-  ('Gin Tanqueray London Dry 750ml', 'Gin premium importado clássico para Gin & Tônica', 145.00, 'Destilados', '/products/gin-tanqueray-london-dry-750ml.png'),
-  ('Gin Bombay Sapphire 750ml', 'Gin premium com 10 botânicos selecionados', 139.90, 'Destilados', '/products/gin-bombay-sapphire-750ml.png'),
-  ('Vodka Absolut 1L', 'Vodka Sueca pura e aromática 100% natural', 105.00, 'Destilados', '/products/vodka-absolut-1l.png'),
-  ('Vodka Smirnoff 998ml', 'Vodka triplamente destilada e dez vezes filtrada', 48.00, 'Destilados', '/products/vodka-smirnoff-998ml.png'),
-  ('Tequila José Cuervo Especial Ouro 750ml', 'Tequila Reposado mexicana tradicional', 119.90, 'Destilados', '/products/tequila-jose-cuervo-especial-ouro.png'),
-  ('Campari Bitter 900ml', 'Aperitivo clássico italiano para Negroni e drinks', 58.00, 'Destilados', '/products/campari-900ml.png'),
-  ('Cachaça 51 965ml', 'A cachaça tradicional do Brasil, ideal para caipirinhas', 16.50, 'Destilados', '/products/cachaca-51-965ml.png'),
+  ('Whisky Johnnie Walker Black Label 1L', 'Blended Scotch Whisky envelhecido 12 anos', 169.00, 'Destilados', '/products/whisky-johnnie-walker-black-label-1l.png', false),
+  ('Whisky Johnnie Walker Red Label 1L', 'O whisky escocês pioneiro e mais vendido do mundo', 98.00, 'Destilados', '/products/whisky-johnnie-walker-red-label-1l.png', false),
+  ('Whisky Chivas Regal 12 Anos 1L', 'Blended Scotch Whisky refinado e aveludado', 159.00, 'Destilados', '/products/whisky-chivas-regal-12-anos-1l.png', false),
+  ('Whisky Jack Daniel''s Old No. 7 1L', 'Tennessee Whiskey autêntico e encorpado', 165.00, 'Destilados', '/products/whisky-jack-daniels-1l.png', false),
+  ('Gin Tanqueray London Dry 750ml', 'Gin premium importado clássico para Gin & Tônica', 145.00, 'Destilados', '/products/gin-tanqueray-london-dry-750ml.png', false),
+  ('Gin Bombay Sapphire 750ml', 'Gin premium com 10 botânicos selecionados', 139.90, 'Destilados', '/products/gin-bombay-sapphire-750ml.png', false),
+  ('Vodka Absolut 1L', 'Vodka Sueca pura e aromática 100% natural', 105.00, 'Destilados', '/products/vodka-absolut-1l.png', false),
+  ('Vodka Smirnoff 998ml', 'Vodka triplamente destilada e dez vezes filtrada', 48.00, 'Destilados', '/products/vodka-smirnoff-998ml.png', false),
+  ('Tequila José Cuervo Especial Ouro 750ml', 'Tequila Reposado mexicana tradicional', 119.90, 'Destilados', '/products/tequila-jose-cuervo-especial-ouro.png', false),
+  ('Campari Bitter 900ml', 'Aperitivo clássico italiano para Negroni e drinks', 58.00, 'Destilados', '/products/campari-900ml.png', false),
+  ('Cachaça 51 965ml', 'A cachaça tradicional do Brasil, ideal para caipirinhas', 16.50, 'Destilados', '/products/cachaca-51-965ml.png', false),
 
   -- Energéticos
-  ('Red Bull Energy Drink 250ml', 'Red Bull te dá asas. Energético clássico gelado', 10.90, 'Energéticos', '/products/red-bull-energy-drink-250ml-sabores.png'),
-  ('Monster Energy 473ml', 'Energético Monster lata grande 473ml', 11.50, 'Energéticos', '/products/monster-energy-473ml-sabores.png'),
-  ('Baly Energy Drink 2L', 'Energético Baly garrafa 2 Litros vários sabores', 14.90, 'Energéticos', '/products/baly-energy-drink-2l-sabores.png'),
+  ('Red Bull Energy Drink 250ml', 'Red Bull te dá asas. Energético clássico gelado', 10.90, 'Energéticos', '/products/red-bull-energy-drink-250ml-sabores.png', false),
+  ('Monster Energy 473ml', 'Energético Monster lata grande 473ml', 11.50, 'Energéticos', '/products/monster-energy-473ml-sabores.png', false),
+  ('Baly Energy Drink 2L', 'Energético Baly garrafa 2 Litros vários sabores', 14.90, 'Energéticos', '/products/baly-energy-drink-2l-sabores.png', false),
 
   -- Refrigerantes
-  ('Coca-Cola Original 2L', 'Refrigerante de Cola garrafa 2 Litros gelada', 12.00, 'Refrigerantes', '/products/coca-cola-2l.png'),
-  ('Coca-Cola Lata 350ml', 'Refrigerante Coca-Cola sabor original lata 350ml', 4.50, 'Refrigerantes', '/products/coca-cola-lata-350ml.png'),
-  ('Guaraná Antarctica 2L', 'O autêntico refrigerante de Guaraná garrafa 2 Litros', 10.50, 'Refrigerantes', '/products/guarana-antarctica-2l.png'),
-  ('Sprite Limão 2L', 'Refrigerante refrescante de limão garrafa 2 Litros', 10.00, 'Refrigerantes', '/products/sprite-2l.png'),
-  ('Schweppes Citrus / Tônica 350ml', 'Refrigerante Schweppes lata 350ml para drinks e consumo puro', 4.80, 'Refrigerantes', '/products/schweppes-350ml.png'),
+  ('Coca-Cola Original 2L', 'Refrigerante de Cola garrafa 2 Litros gelada', 12.00, 'Refrigerantes', '/products/coca-cola-2l.png', false),
+  ('Coca-Cola Lata 350ml', 'Refrigerante Coca-Cola sabor original lata 350ml', 4.50, 'Refrigerantes', '/products/coca-cola-lata-350ml.png', false),
+  ('Guaraná Antarctica 2L', 'O autêntico refrigerante de Guaraná garrafa 2 Litros', 10.50, 'Refrigerantes', '/products/guarana-antarctica-2l.png', false),
+  ('Sprite Limão 2L', 'Refrigerante refrescante de limão garrafa 2 Litros', 10.00, 'Refrigerantes', '/products/sprite-2l.png', false),
+  ('Schweppes Citrus / Tônica 350ml', 'Refrigerante Schweppes lata 350ml para drinks e consumo puro', 4.80, 'Refrigerantes', '/products/schweppes-350ml.png', false),
 
   -- Diversos
-  ('Essência Zomo Strong Mint', 'Essência para narguilé sabor Menta refrescante', 15.00, 'Diversos', null);
+  ('Essência Zomo Strong Mint', 'Essência para narguilé sabor Menta refrescante', 15.00, 'Diversos', null, false);
 
 -- 5. Bucket de imagens (se não existir)
 INSERT INTO storage.buckets (id, name, public) 
