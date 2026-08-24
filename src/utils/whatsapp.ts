@@ -8,7 +8,7 @@ interface OrderDetails {
   deliveryMethod: 'delivery' | 'pickup';
 }
 
-const STORE_PHONE = "5561992283532"; // Substituir pelo número real da distribuidora (formato: 55DDDNUMERO)
+const STORE_PHONE = "5561993756223"; // Substituir pelo número real da distribuidora (formato: 55DDDNUMERO)
 
 export function generateWhatsAppLink(details: OrderDetails): string {
   const { items, total, name, address, deliveryMethod } = details;
