@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Header from '../../components/Header';
 import ProductCard from '../../components/ProductCard';
-import { CATEGORIES } from '../../data/mockProducts';
+
 import { Product } from '../../types';
 import styles from './page.module.css';
 
@@ -13,6 +13,8 @@ interface Props {
 
 export default function CatalogView({ initialProducts }: Props) {
   const [activeCategory, setActiveCategory] = useState('Todos');
+
+  const dynamicCategories = ['Todos', ...Array.from(new Set(initialProducts.map(p => p.category)))];
 
   const filteredProducts = activeCategory === 'Todos'
     ? initialProducts
@@ -26,7 +28,7 @@ export default function CatalogView({ initialProducts }: Props) {
         
         {/* Category Filter */}
         <div className={styles.categoryScroll}>
-          {CATEGORIES.map(category => (
+          {dynamicCategories.map(category => (
             <button
               key={category}
               className={`${styles.catBtn} ${activeCategory === category ? styles.active : ''}`}

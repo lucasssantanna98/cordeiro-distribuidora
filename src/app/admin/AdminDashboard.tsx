@@ -5,7 +5,7 @@ import { supabase } from '../../utils/supabase';
 import { useRouter } from 'next/navigation';
 import { Product } from '../../types';
 import { getAllProductsForAdmin, addProduct, updateProduct, deleteProduct, uploadImage } from '../../services/productService';
-import { CATEGORIES } from '../../data/mockProducts';
+
 import styles from './page.module.css';
 
 export default function AdminDashboard() {
@@ -21,7 +21,10 @@ export default function AdminDashboard() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [category, setCategory] = useState('Diversos');
+
+  const dynamicCategories = ['Todos', ...Array.from(new Set(products.map(p => p.category)))];
+  const formCategories = dynamicCategories.filter(c => c !== 'Todos');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState('');
   const [isFeatured, setIsFeatured] = useState(false);
@@ -57,7 +60,7 @@ export default function AdminDashboard() {
     setName('');
     setDescription('');
     setPrice('');
-    setCategory(CATEGORIES.find(c => c !== 'Todos') || 'Diversos');
+    setCategory(formCategories.length > 0 ? formCategories[0] : 'Diversos');
     setImageFile(null);
     setImageUrl('');
     setIsFeatured(false);
@@ -171,7 +174,7 @@ export default function AdminDashboard() {
           className={styles.searchInput}
         />
         <div className={styles.categoryFilters}>
-          {CATEGORIES.map(cat => (
+          {dynamicCategories.map(cat => (
             <button 
               key={cat} 
               onClick={() => setSelectedCategory(cat)}
@@ -248,7 +251,7 @@ export default function AdminDashboard() {
                 value={price} onChange={e => setPrice(e.target.value)} className={styles.input}
               />
               <select value={category} onChange={e => setCategory(e.target.value)} className={styles.input}>
-                {CATEGORIES.filter(c => c !== 'Todos').map(c => (
+                {formCategories.map(c => (
                   <option key={c} value={c}>{c}</option>
                 ))}
               </select>
